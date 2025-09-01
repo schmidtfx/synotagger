@@ -92,7 +92,12 @@ func main() {
 	}
 	defer db.Close()
 
-	session, err := ort.NewDynamicAdvancedSession(*modelPath, nil)
+	session, err := ort.NewDynamicAdvancedSession(
+		*modelPath,
+		[]string{*inputName},  // input tensor names
+		[]string{*outputName}, // output tensor names
+		nil,                   // *SessionOptions
+	)
 	if err != nil {
 		log.Fatalf("session: %v", err)
 	}
@@ -149,7 +154,7 @@ func main() {
 			needHash := *hashMode == "always" || (*hashMode == "changed" && !unchanged)
 			lastScanOld := false
 			if rec != nil && *rehashDays > 0 {
-				lastScanOld = time.Unix(rec.LastScanned, 0).Before(time.Now().AddDate(0, 0-*rehashDays))
+				lastScanOld = time.Unix(rec.LastScanned, 0).Before(time.Now().AddDate(0, 0, -(*rehashDays)))
 			}
 			if *skipUnchanged && unchanged && !lastScanOld {
 				// nothing to do; still write a line for visibility
@@ -294,8 +299,8 @@ func classifyOne(session *ort.DynamicAdvancedSession, path, inName, outName stri
 	defer outTensor.Destroy()
 
 	if err := session.Run(
-		map[string]ort.Value{inName: inTensor},
-		map[string]ort.Value{outName: outTensor},
+		[]ort.Value{inTensor},  // inputs in the same order as provided names
+		[]ort.Value{outTensor}, // outputs in the same order as provided names
 	); err != nil {
 		return Result{Path: path, Err: err.Error(), Threshold: th}
 	}
