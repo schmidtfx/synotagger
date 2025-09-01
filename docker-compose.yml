@@ -1,0 +1,34 @@
+services:
+  nsfw:
+    build: .
+    image: nsfw-go:latest
+    container_name: nsfw-go
+    restart: unless-stopped
+    volumes:
+      - /volume1/photos:/photos:rw
+      - /volume1/nsfw-output:/output:rw
+      - /volume1/models:/models:ro
+    command: [
+      "-model","/models/nsfwjs.onnx",
+      "-input-name","input_1",
+      "-output-name","predictions",
+      "-nchw=false",
+      "-size","224",
+      "-mean","0.0,0.0,0.0",
+      "-std","1.0,1.0,1.0",
+      "-classes","drawing,neutral,sexy,hentai,porn",
+      "-nsfw-expr","sexy+hentai+porn",
+      "-dir","/photos",
+      "-out","/output/results.jsonl",
+      "-csv","/output/results.csv",
+      "-th","0.85",
+      "-workers","4",
+      "-state","/output/state.db",
+      "-skip-unchanged",
+      "-hash-mode","changed",
+      "-rehash-days","30",
+            "-write-tags",
+      "-tag-prefix","nsfw",
+      "-tag-subs","auto",
+      "-sidecar"
+    ]
