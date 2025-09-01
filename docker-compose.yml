@@ -17,7 +17,7 @@ services:
       "-size","320",
       "-mean","0.485,0.456,0.406",
       "-std","0.229,0.224,0.225",
-      "-classes","BELLY_EXPOSED,BUTTOCKS_EXPOSED,BREAST_EXPOSED,GENITALIA_F_EXPOSED,GENITALIA_M_EXPOSED",
+      "-classes","BELLY_EXPOSED,BUTTOCKS_EXPOSED,FEMALE_BREAST_EXPOSED,FEMALE_GENITALIA_EXPOSED,MALE_GENITALIA_EXPOSED",
       "-det-conf","0.25",
       "-det-iou","0.45",
       "-det-max","300",
@@ -31,3 +31,4 @@ services:
       "-rehash-days","30",
       "-write-tags","-tag-prefix","nsfw","-tag-subs","auto","-sidecar"
     ]
+
