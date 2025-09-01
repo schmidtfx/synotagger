@@ -5,9 +5,9 @@ services:
     container_name: nsfw-go
     restart: unless-stopped
     volumes:
-      - /volume1/photos:/photos:rw
-      - /volume1/nsfw-output:/output:rw
-      - /volume1/models:/models:ro
+      - /volume1/homes/schmidtfx/Photos:/photos:rw
+      - /volume1/docker/synotagger/nsfw-output:/output:rw
+      - /volume1/docker/synotagger/models:/models:ro
     command: [
       "-model","/models/nsfwjs.onnx",
       "-input-name","input_1",
