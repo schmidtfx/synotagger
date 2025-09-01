@@ -2,9 +2,8 @@ package state
 
 import (
 	"database/sql"
-	"time"
-
 	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 type Record struct {

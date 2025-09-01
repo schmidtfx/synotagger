@@ -5,30 +5,30 @@ services:
     container_name: nsfw-go
     restart: unless-stopped
     volumes:
-      - /volume1/homes/schmidtfx/Photos:/photos:rw
-      - /volume1/docker/synotagger/nsfw-output:/output:rw
-      - /volume1/docker/synotagger/models:/models:ro
+      - /volume1/photos:/photos:rw
+      - /volume1/nsfw-output:/output:rw
+      - /volume1/models:/models:ro
     command: [
-      "-model","/models/320n.onnx",
-      "-model-type","detector",
-      "-input-name","images",
-      "-output-name","output0",
-      "-nchw","false",
-      "-size","320",
-      "-mean","0.485,0.456,0.406",
-      "-std","0.229,0.224,0.225",
-      "-classes","BELLY_EXPOSED,BUTTOCKS_EXPOSED,FEMALE_BREAST_EXPOSED,FEMALE_GENITALIA_EXPOSED,MALE_GENITALIA_EXPOSED",
-      "-det-conf","0.25",
-      "-det-iou","0.45",
-      "-det-max","300",
-      "-th","0.50",
+      "-model","/models/nsfwjs.onnx",
+      "-input-name","input_1",
+      "-output-name","predictions",
+      "-nchw=false",
+      "-size","224",
+      "-mean","0.0,0.0,0.0",
+      "-std","1.0,1.0,1.0",
+      "-classes","drawing,neutral,sexy,hentai,porn",
+      "-nsfw-expr","sexy+hentai+porn",
       "-dir","/photos",
       "-out","/output/results.jsonl",
       "-csv","/output/results.csv",
+      "-th","0.85",
       "-workers","4",
       "-state","/output/state.db",
       "-skip-unchanged",
+      "-hash-mode","changed",
       "-rehash-days","30",
-      "-write-tags","-tag-prefix","nsfw","-tag-subs","auto","-sidecar"
+            "-write-tags",
+      "-tag-prefix","nsfw",
+      "-tag-subs","auto",
+      "-sidecar"
     ]
-
